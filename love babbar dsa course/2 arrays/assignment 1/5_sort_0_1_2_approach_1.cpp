@@ -1,6 +1,10 @@
 #include <iostream>
 using namespace std;
 
+/*
+
+// approach 1
+
 void sort_0_1_2(int* arr , int n){
     int count0 = 0;
     int count1 = 0;
@@ -22,6 +26,30 @@ void sort_0_1_2(int* arr , int n){
         arr[counter++] = 2;
     } 
 }
+
+*/
+
+// approach 2 (dutch national flag algo)
+void sort_0_1_2(int *arr,int n){
+    int low = 0;
+    int mid = 0;
+    int high = n-1;
+
+    while (mid <= high){
+        if (arr[mid] == 0){
+            swap(arr[low],arr[mid]);
+            low++; mid++;
+        }
+        else if (arr[mid] == 1){
+            mid++;
+        }
+        else{
+            swap(arr[mid],arr[high]);
+            high--;
+        }
+    }
+}
+
  
 int main(){
     int n;
