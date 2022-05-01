@@ -72,7 +72,7 @@ int findDuplicate(vector<int>& arr) {
 
 */
 
-
+/*
 // using swap sort
 // time complexity - O(n)
 // space complexity - O(1)
@@ -99,6 +99,23 @@ int findDuplicate(vector<int>& nums) {
     for (int i = 0 ; i < nums.size() ; i++){
         if (nums[i] != i+1){
             return nums[i];
+        }
+    }
+    
+    return -1;
+}
+*/
+
+// treat element of array as index of given array
+// time complexity - O(n)
+// space compexity - O(1)
+
+int findDuplicate(vector<int>& nums) {
+    for (int i = 0 ; i < nums.size() ; i++){
+        if (nums[abs(nums[i])]>0){
+            nums[abs(nums[i])] = - nums[abs(nums[i])];
+        }else{
+            return abs(nums[i]);
         }
     }
     
