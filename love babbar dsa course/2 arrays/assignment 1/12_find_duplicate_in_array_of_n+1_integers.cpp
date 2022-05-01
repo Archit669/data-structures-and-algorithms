@@ -45,6 +45,7 @@ int findDuplicate(vector<int>& arr) {
 */
 
 
+/*
 
 // floyd's tortoise and hare
 // time complexity - O(N)
@@ -68,6 +69,42 @@ int findDuplicate(vector<int>& arr) {
         
         return ptr1;
     }
+
+*/
+
+
+// using swap sort
+// time complexity - O(n)
+// space complexity - O(1)
+
+int findDuplicate(vector<int>& nums) {
+    int i = 0;
+    while(i< nums.size()){
+        if (nums[i] == i+1){
+            i++;
+        }else{
+            if (nums[nums[i]-1] != nums[i]){
+                swap(nums[i] , nums[nums[i]-1]);
+            }else{
+                i++;
+            }
+        }
+        
+        // loop for dry run swap sort
+        // for (int i = 0 ; i < nums.size();i++){
+        //     cout << nums[i] << " ";
+        // }cout << endl;
+    }
+    
+    for (int i = 0 ; i < nums.size() ; i++){
+        if (nums[i] != i+1){
+            return nums[i];
+        }
+    }
+    
+    return -1;
+}
+
 
 
 
