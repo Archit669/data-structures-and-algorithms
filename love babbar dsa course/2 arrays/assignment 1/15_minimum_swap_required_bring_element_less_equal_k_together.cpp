@@ -13,7 +13,7 @@ using namespace std;
 
 /*
 // brute force approach
-// time complexity - O(n)
+// time complexity - O(n^2)
 // space complexity -O(1)
 class Solution
 {
