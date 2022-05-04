@@ -4,6 +4,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
+/*
 // approach - 1
 // time complexity - O(n^2)
 // space complexity - O(1)
@@ -28,6 +30,42 @@ class Solution{
             }
         }
         return 0;
+    }
+};
+
+*/
+
+
+// approach-2
+// time complexity - O(n)
+// space complexity - O(n)
+
+class Solution{
+    public:
+    //Complete this function
+    //Function to check whether there is a subarray present with 0-sum or not.
+    bool subArrayExists(int arr[], int n)
+    {
+        map<int,int> m;
+        int sum = 0;
+        for (int i = 0 ; i < n ; i++){
+            sum+= arr[i];
+            m[sum]++;
+            if (arr[i] == 0){
+                return true;
+            }
+        }
+        
+        for (auto it : m){
+            if (it.second > 1){
+                return true;
+            }
+            if (it.first == 0){
+                return true;
+            }
+        }
+        
+        return false;
     }
 };
 
