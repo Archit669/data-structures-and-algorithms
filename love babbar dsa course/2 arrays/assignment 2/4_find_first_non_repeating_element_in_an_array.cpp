@@ -9,7 +9,7 @@ using namespace std;
 
 // approach - 1
 // time complexity - O(n)
-// space complexity - O(1)
+// space complexity - O(n)
 class Solution{
     public:
     int firstNonRepeating(int arr[], int n) 
