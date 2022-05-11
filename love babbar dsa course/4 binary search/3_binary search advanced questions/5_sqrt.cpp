@@ -3,14 +3,9 @@ using namespace std;
 
 
 double sqrt(double x){
-    double r = x;
-    int tmp = -1;
+    long double r = x;
     while (r*r > x){
-        double temp = r;
         r = (r + x/r)/2;
-        if (temp == r){
-            break;
-        }
     }
     return r;
 }
