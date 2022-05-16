@@ -1,0 +1,13 @@
+String Questions:
+
+- Length of String
+- Reverse a String: https://leetcode.com/problems/reverse-string/
+- Check Palindrome:https://bit.ly/3E55FvF
+- Valid Palindrome : https://leetcode.com/problems/valid-palindrome/
+- Reverse words: https://leetcode.com/problems/reverse-words-in-a-string-ii/
+- Maximum occurring character: https://practice.geeksforgeeks.org/problems/maximum-occuring-character-1587115620/1
+- Remove all occurrences of substring: https://bit.ly/3sfP71Q
+- Remove all adjacent duplicates: https://leetcode.com/problems/remove-all-occurrences-of-a-substring/
+- String Compression: https://leetcode.com/problems/string-compression/ 
+- Permutation in Strings: https://leetcode.com/problems/permutation-in-string/
+- Remove adjacent Duplicates: https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
