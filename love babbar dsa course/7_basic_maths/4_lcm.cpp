@@ -1,0 +1,1 @@
+// lcm X hcf = a X b
