@@ -1,0 +1,32 @@
+recusion is the programming technique in which function calls itself directly or indirectly.
+when big problem depends on same type of smaller problem.
+example:
+5! = 5 * 4!
+4! = 4 * 3!
+...
+
+
+mandatory thing in recursion.
+1) base case  :  rukna kha h.(terminating condition)
+2) recursive case :  where function calling itself.
+
+example of tail recursion: 
+void print()
+{
+    // base case
+    if (condition)
+    {
+        return;
+    }
+
+    // statements
+    ....
+
+    // recursive case
+    print()
+}
+
+
+Types of recursion
+1) tail recursion : if recursive call at end.
+2) head recursion : if recursion call above processing part.
