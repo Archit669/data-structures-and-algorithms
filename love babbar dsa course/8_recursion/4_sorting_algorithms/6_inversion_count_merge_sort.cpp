@@ -9,6 +9,21 @@ class Solution{
     // arr[]: Input Array
     // N : Size of the Array arr[]
     // Function to count inversions in the array
+
+    // bruteforce approach 
+    // time complexity - O(n2)
+    // space complexity - O(1)
+    long long int inversionCount(long long arr[], long long N)
+    {
+        long long count = 0;
+        for (int i = 0 ; i < N ; i++){
+            for (int j = i+1 ; j < N ; j++){
+                if (arr[i] > arr[j]) count++;
+            }
+        }
+        
+        return count;
+    }
     
     long long int merge(long long int arr[] , int l , int r){
         long long count = 0;
