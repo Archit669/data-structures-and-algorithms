@@ -96,12 +96,6 @@ class circularLinkedList
                 return 1;
             }
 
-            // for insert at last of linked list (index == size)
-            if (index == size)
-            {
-                InsertAtTail(data);
-                return 1;
-            }
 
             // for insert at given index
             
@@ -231,8 +225,8 @@ int main(){
     circularLinkedList l1(5);
     l1.InsertAtTail(3);
     l1.InsertAtTail(3);
-    l1.InsertAtMiddle(2,4);
-    l1.DeletionAtMiddle(3);
+    l1.InsertAtMiddle(2,3);
+    // l1.DeletionAtMiddle(3);
     l1.display();
     cout << l1.search(0) << endl;
     return 0;
