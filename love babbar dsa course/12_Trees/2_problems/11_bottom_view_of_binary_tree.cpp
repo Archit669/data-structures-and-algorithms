@@ -1,6 +1,7 @@
 //{ Driver Code Starts
 #include <bits/stdc++.h>
 using namespace std;
+#define MAX_HEIGHT 100000
 
 // Tree Node
 struct Node
@@ -9,6 +10,7 @@ struct Node
     Node* left;
     Node* right;
 };
+
 // Utility function to create a new Tree Node
 Node* newNode(int val)
 {
@@ -16,143 +18,139 @@ Node* newNode(int val)
     temp->data = val;
     temp->left = NULL;
     temp->right = NULL;
-    
+
     return temp;
 }
 
+
+vector <int> bottomView(Node *root);
+
 // Function to Build Tree
 Node* buildTree(string str)
-{   
+{
     // Corner Case
     if(str.length() == 0 || str[0] == 'N')
-            return NULL;
-    
-    // Creating vector of strings from input 
+        return NULL;
+
+    // Creating vector of strings from input
     // string after spliting by space
     vector<string> ip;
-    
+
     istringstream iss(str);
     for(string str; iss >> str; )
         ip.push_back(str);
-        
+
     // Create the root of the tree
     Node* root = newNode(stoi(ip[0]));
-          
+
     // Push the root to the queue
     queue<Node*> queue;
     queue.push(root);
-        
+
     // Starting from the second element
     int i = 1;
     while(!queue.empty() && i < ip.size()) {
-            
+
         // Get and remove the front of the queue
         Node* currNode = queue.front();
         queue.pop();
-            
+
         // Get the current node's value from the string
         string currVal = ip[i];
-            
+
         // If the left child is not null
         if(currVal != "N") {
-                
+
             // Create the left child for the current node
             currNode->left = newNode(stoi(currVal));
-                
+
             // Push it to the queue
             queue.push(currNode->left);
         }
-            
+
         // For the right child
         i++;
         if(i >= ip.size())
             break;
         currVal = ip[i];
-            
+
         // If the right child is not null
         if(currVal != "N") {
-                
+
             // Create the right child for the current node
             currNode->right = newNode(stoi(currVal));
-                
+
             // Push it to the queue
             queue.push(currNode->right);
         }
         i++;
     }
-    
-    return root;
-}
 
-// Function for Inorder Traversal
-void printInorder(Node* root)
-{
-    if(!root)
-        return;
-        
-    printInorder(root->left);
-    cout<<root->data<<" ";
-    printInorder(root->right);
+    return root;
 }
 
 
 // } Driver Code Ends
-class Solution
-{
-    public:
-    void solve(Node* root, map<int, priority_queue<pair<int, Node *> >> &m , int level, int depth){
-        if (root == NULL ) return;
-        m[level].push({depth, root});
-        solve(root->left, m, level-1 , depth + 1);
-        solve(root->right, m , level + 1 , depth + 1);
+//Function to return a list containing the bottom view of the given tree.
+
+class Solution {
+    void solve(Node* root, map<int,int> &m){
+        queue<pair<Node*, pair<int,int>>> q;
+        q.push({root, {0 ,0}});
+        while (!q.empty()){
+            pair<Node*, pair<int,int>> temp = q.front();
+            q.pop();
+            int hd = temp.second.first;
+            int lvl = temp.second.second;
+            Node* node = temp.first;
+            
+            m[hd] = node->data;
+            
+            if (node->left){
+                q.push({node->left, {hd-1, lvl+1}});
+            }
+            
+            if (node->right){
+                q.push({node->right, {hd+1, lvl+1}});
+            }
+        }
     }
-    //Function to find the vertical order traversal of Binary Tree.
-    vector<int> verticalOrder(Node *root)
-    {
-        map<int, priority_queue<pair<int, Node *> >> m;
-        
-        solve(root, m , 0, 0);
+  public:
+    vector <int> bottomView(Node *root) {
+        if (root == NULL) return {};
         
         vector<int> ans;
         
-        for (auto &x : m){
-             priority_queue <int, vector<int>, greater<int>> pq ;  
-            while (!x.second.empty()){
-                pq.push(x.second.top().second->data);
-            }
-            while (!pq.empty()){
-                ans.push_back(pq.top());
-                pq.pop();
-            }
+        map<int,int> m;
+        
+        solve(root, m);
+        
+        for (auto &i : m){
+            ans.push_back(i.second);
         }
         
         return ans;
-        
     }
 };
 
-
-
 //{ Driver Code Starts.
+
 int main() {
     int t;
-    string  tc;
-    getline(cin,tc);
+    string tc;
+    getline(cin, tc);
     t=stoi(tc);
     while(t--)
     {
-        string s;
-        getline(cin,s);
-        // string c;
-        // getline(cin,c);
-        Solution obj;
-    	Node* root = buildTree(s);
-    	
-    	vector <int> res = obj.verticalOrder(root);
-    	for (int i : res) cout << i << " ";
+        string s ,ch;
+        getline(cin, s);
+        Node* root = buildTree(s);
+        Solution ob;
+        vector <int> res = ob.bottomView(root);
+        for (int i : res) cout << i << " ";
         cout << endl;
     }
-	return 0;
+    return 0;
 }
 
 
