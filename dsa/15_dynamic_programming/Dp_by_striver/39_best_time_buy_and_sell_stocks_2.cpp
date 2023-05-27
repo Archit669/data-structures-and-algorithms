@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 // memoization
 class Solution {
 public:
@@ -47,7 +50,7 @@ public:
         int n = prices.size();
 
         vector<int> ahead(2,-1) , curr(2,-1);
-        ahead[0]e = ahead[1] = 0;
+        ahead[0] = ahead[1] = 0;
 
         for (int idx = n-1 ; idx >= 0 ; idx--){
             for (int buy = 1 ; buy >= 0 ; buy--){
