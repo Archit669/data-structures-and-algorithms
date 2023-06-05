@@ -27,7 +27,7 @@ public:
             
             // try all possible paritions
             int ans = 1e9;
-            for (int k = i ; k < j ; k++)
+            for (int k = i ; k < j ; k++) 
             {
                 int steps = f(i , k) + f(k+1 , j) + arr[i-1] * arr[k] * arr[j];
                 ans = min(ans, steps);
