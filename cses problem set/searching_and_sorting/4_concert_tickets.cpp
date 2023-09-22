@@ -2,10 +2,7 @@
 #define int long long
 using namespace std;
 
-
-
 void solve(vector<int> &ticketPrice, vector<int>& maxPrice){
-    int totalTickets = ticketPrice.size();
     int totalCust = maxPrice.size();
 
     map<int,int> m;
