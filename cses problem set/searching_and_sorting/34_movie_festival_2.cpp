@@ -13,6 +13,41 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 void solve(){
 
+    int n, k;
+    cin >> n >> k;
+
+    // take input array
+    vector<pair<int,int>> arr(n);
+    for (int idx = 0; idx < n; idx++){
+        cin >> arr[idx].first;
+        cin >> arr[idx].second;
+    }
+
+    set<pair<int,int>> s;
+    sort(arr.begin(), arr.end(), [&](auto& a, auto& b){
+        return a.second < b.second;
+    });
+
+    int count = 0;
+
+    for (int idx = 0; idx < n ; idx++){
+        if (s.size() == 0){
+            s.insert({-1LL * arr[idx].second,idx});
+        }else{
+            auto it = s.lower_bound({-1LL*arr[idx].first, -1});
+            if (it != s.end()){
+                s.erase(it);
+                s.insert({-1LL*arr[idx].second, idx});
+            }else if(it == s.end() && s.size() < k){
+                s.insert({-1LL*arr[idx].second, idx});
+            }else{
+                count++;
+            }
+        }
+    }
+
+    cout << n-count << endl;
+
 }
 
 signed main(){

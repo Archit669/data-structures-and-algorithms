@@ -13,6 +13,39 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 void solve(){
 
+    int n, a, b;
+    cin >> n >> a >> b;
+
+    // take input array
+    vector<int> arr(n+1);
+    for (int idx = 1; idx <= n; idx++){
+        cin >> arr[idx];
+    }
+
+    // calcualte the prefix array
+    for (int idx = 1 ; idx <= n ; idx++){
+        arr[idx] = arr[idx] + arr[idx-1];
+    }
+
+    set<pair<int,int>> s;
+    
+    // insert first b-a+1 values in set
+    for (int idx = a; idx <= b ; idx++){
+        s.insert({arr[idx], idx});
+    }
+
+    int maxSum = LLONG_MIN;
+
+    // now calculate for each window
+    for (int idx = 1 ; idx <= n-a+1; idx++){
+        maxSum = max(maxSum, s.rbegin()->first - arr[idx-1]);
+        s.erase({arr[idx+a-1], idx+a-1});
+        if (idx + b <= n){
+            s.insert({arr[idx+b], idx+b});
+        }
+    }
+
+    cout << maxSum << endl;
 }
 
 signed main(){

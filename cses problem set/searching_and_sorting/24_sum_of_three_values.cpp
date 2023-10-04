@@ -19,6 +19,7 @@ signed main(){
     sort(arr.begin(), arr.end());
 
     for (int idx = 0 ; idx < n-2 ; idx++){
+        
         int start = idx + 1;
         int end = n-1;
 
