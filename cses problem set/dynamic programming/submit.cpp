@@ -1,3 +1,5 @@
+// approach-3 (recursion + memoization optimized)
+
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -10,15 +12,49 @@ using namespace __gnu_pbds;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds; // find_by_order, order_of_key
 #define mod 1000000007
 
-int editDistance(string& s1, string&s2){
-    
+
+vector<set<int>> dp;
+
+set<int> &solve(int idx, vector<int> &arr){
+    if (idx == (int)arr.size()){
+        set<int> s;
+        s.insert(0);
+        return dp[idx] = s;
+    }
+
+    if (dp[idx].size() > 0) return dp[idx];
+
+    set<int> &ans = solve(idx+1, arr);
+
+    set<int> finalAns;
+    for (auto x : ans){
+        finalAns.insert(x + arr[idx]);
+        finalAns.insert(x);
+    }
+
+    return dp[idx] = finalAns;
 }
 
-void solve(){
-    string s1,s2;
-    cin >> s1 >> s2;
+void Archit(){
+    int n;
+    cin >> n;
 
-    cout << editDistance(s1, s2) << endl;
+    dp = vector<set<int>>(n+1);
+
+    vector<int> arr(n);
+    for (int idx = 0 ; idx < n ; idx++){
+        cin >> arr[idx];
+    }
+
+    auto &ans = solve(0, arr);
+    ans.erase(0);
+
+    cout << ans.size() << endl;
+
+    for (auto &x : ans){
+        cout << x << " ";
+    }cout << endl;
+
 }
  
 signed main(){
@@ -32,10 +68,10 @@ signed main(){
 
     // main
     int t = 1;
-    cin >> t;
+    // cin >> t;
 
     while (t--){
-        solve();
+        Archit();
     }
     
     // calculate time of execution
@@ -44,6 +80,3 @@ signed main(){
     cerr<<fixed<<setprecision(10)<<"\nTime Taken: "<<(double)(clock()- tStart)/CLOCKS_PER_SEC<<endl;
     #endif
 }
-
- 
-
