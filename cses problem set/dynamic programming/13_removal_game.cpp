@@ -1,3 +1,4 @@
+
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -9,44 +10,32 @@ using namespace __gnu_pbds;
 #define int long long
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds; // find_by_order, order_of_key
 #define mod 1000000007
- 
- 
+
+
 void Archit(){
     int n;
     cin >> n;
- 
+
     vector<int> arr(n);
-    int sum = 0;
-    for (int idx = 0 ; idx < n ; idx++){
-        arr[idx] = idx+1;
-        sum += arr[idx];
+
+    for (auto &x : arr){
+        cin >> x;
     }
- 
-    vector<vector<int>> dp(n+1, vector<int>(sum/2+1,-1));
- 
-    function<int(int,int)> f = [&](int idx, int target){
-        if (idx == (int)(arr.size())){
-            if (target == 0){
-                return 1LL;
-            }else{
-                return 0LL;
-            }
-        }
- 
-        if (dp[idx][target] != -1) return dp[idx][target];
- 
-        int pick = 0;
-        if (target - arr[idx] >= 0){
-            pick = f(idx+1, target - arr[idx]);
-        }
-        
-        int unpick = f(idx+1, target);
- 
-        return dp[idx][target] = (pick%mod + unpick%mod)%mod;
+
+    vector<vector<int>> dp(n+1, vector<int>(n+1,-1));
+
+    function<int(int,int)> f = [&](int idx, int jdx){
+        if (idx > jdx) return 0LL;
+        if (idx == jdx) return arr[idx];
+        if (dp[idx][jdx] != -1) return dp[idx][jdx];
+        int op1 = arr[idx] + min(f(idx+2, jdx), f(idx+1, jdx-1));
+        int op2 = arr[jdx] + min(f(idx, jdx-2), f(idx+1, jdx-1));
+
+        return dp[idx][jdx] = max(op1, op2);
     };
- 
-    if (sum % 2 != 0) cout << 0 << endl;
-    else cout << f(0, sum/2)/2 << endl;
+
+
+    cout << f(0, n-1) << endl;
 }
  
 signed main(){
@@ -57,11 +46,11 @@ signed main(){
     freopen("input.txt", "r" , stdin);
     freopen("output.txt", "w", stdout);
     #endif
- 
+
     // main
     int t = 1;
     // cin >> t;
- 
+
     while (t--){
         Archit();
     }
