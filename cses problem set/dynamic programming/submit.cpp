@@ -9,6 +9,36 @@ using namespace __gnu_pbds;
 #define int long long
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds; // find_by_order, order_of_key
 #define mod 1000000007
+
+int inv(int A, int M)
+{
+    int m0 = M;
+    int y = 0, x = 1;
+ 
+    if (M == 1)
+        return 0;
+ 
+    while (A > 1) {
+        // q is quotient
+        int q = A / M;
+        int t = M;
+ 
+        // m is remainder now, process same as
+        // Euclid's algo
+        M = A % M, A = t;
+        t = y;
+ 
+        // Update y and x
+        y = x - q * y;
+        x = t;
+    }
+ 
+    // Make x positive
+    if (x < 0)
+        x += m0;
+ 
+    return x;
+}
  
  
 void Archit(){
@@ -46,7 +76,12 @@ void Archit(){
     };
  
     if (sum % 2 != 0) cout << 0 << endl;
-    else cout << f(0, sum/2)/2 << endl;
+    else{
+        int ans = f(0, sum/2);
+        int finalAns = ((ans%mod)* inv(2, mod))%mod;
+
+        cout << finalAns << endl;
+    }
 }
  
 signed main(){
