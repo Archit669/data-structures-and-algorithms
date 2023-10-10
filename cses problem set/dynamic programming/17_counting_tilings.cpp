@@ -1,24 +1,15 @@
 #include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-  
 using namespace std;
-using namespace chrono;
-using namespace __gnu_pbds;
- 
 #define int long long
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds; // find_by_order, order_of_key
-
-/*-----------------------------------------------------*/
 int M=1e9+7;
-int po(int a, int b, int mod) {int res = 1; while (b > 0) {if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1;} return res;}
-int gcd(int a, int b) {if (b > a) {return gcd(b, a);} if (b == 0) {return a;} return gcd(b, a % b);}
-int inv(int x){ return po(x,M-2,M);}
-int add(int a, int b, int m) {a = a % m; b = b % m; return (((a + b) % m) + m) % m;}
-int mult(int a, int b, int m) {a = a % m; b = b % m; return (((a * b) % m) + m) % m;}
-int sub(int a, int b, int m) {a = a % m; b = b % m; return (((a - b) % m) + m) % m;}
-int div1(int x, int y){ return mult(x,inv(y),M); }
-/*-----------------------------------------------------*/
+
+// the main dp optimal substructure of the problem is 
+// dp(i, mask)
+//      it denotes the no of ways to fill the entire grid from ith col to last col
+
+// and we have to find out dp(1,0)
+// 1 based indexing
+
 
 void generateAllNextMasks(int currMask, int nextMask, int currRow, vector<int>& nextMasks, int rows){
     
@@ -48,7 +39,6 @@ void generateAllNextMasks(int currMask, int nextMask, int currRow, vector<int>& 
         generateAllNextMasks(currMask, nextMask, currRow + 1, nextMasks, rows);
     }
 }   
-
 
 
 void Archit(){
@@ -97,25 +87,6 @@ void Archit(){
 }
  
 signed main(){
-    
-    // input output 
-    ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r" , stdin);
-    freopen("output.txt", "w", stdout);
-    #endif
- 
-    // main
-    int t = 1;
-    // cin >> t;
- 
-    while (t--){
-        Archit();
-    }
-    
-    // calculate time of execution
-    #ifndef ONLINE_JUDGE
-    clock_t tStart = clock();
-    cerr<<fixed<<setprecision(10)<<"\nTime Taken: "<<(double)(clock()- tStart)/CLOCKS_PER_SEC<<endl;
-    #endif
+    int t = 1; 
+    while (t--) Archit();
 }
