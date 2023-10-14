@@ -1,100 +1,77 @@
 #include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-  
 using namespace std;
-using namespace chrono;
-using namespace __gnu_pbds;
- 
 #define int long long
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds; // find_by_order, order_of_key
 
-/*-----------------------------------------------------*/
-int M=1e9+7;
-int po(int a, int b, int mod) {int res = 1; while (b > 0) {if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1;} return res;}
-int gcd(int a, int b) {if (b > a) {return gcd(b, a);} if (b == 0) {return a;} return gcd(b, a % b);}
-int inv(int x){ return po(x,M-2,M);}
-int add(int a, int b, int m) {a = a % m; b = b % m; return (((a + b) % m) + m) % m;}
-int mult(int a, int b, int m) {a = a % m; b = b % m; return (((a * b) % m) + m) % m;}
-int sub(int a, int b, int m) {a = a % m; b = b % m; return (((a - b) % m) + m) % m;}
-int div1(int x, int y){ return mult(x,inv(y),M); }
-/*-----------------------------------------------------*/
+// approach -4 (approach-3 tabulation)
+// independence from maxWt
 
-void generateAllNextMasks(int currMask, int nextMask, int currRow, vector<int>& nextMasks, int rows){
-    
-    // traverse all rows
-    if (currRow == rows+1){
-        nextMasks.push_back(nextMask);
-        return;
-    }
-
-    // if my current row cell is empty
-    if ((currMask & (1 << currRow)) == 0){
-        // place one horizontal tile
-        generateAllNextMasks(currMask, (nextMask | (1 << currRow)), currRow + 1, nextMasks, rows);
-    }
-
-    // if my current row and my next row cell both are empty
-    if (currRow != rows){
-        if ( (currMask & (1 << currRow)) == 0 && (currMask & (1 << (currRow+1))) == 0){
-            // place an vertical tile
-            generateAllNextMasks(currMask, nextMask, currRow + 2, nextMasks, rows);
-        }
-    }
-
-    // if my current row cell is not empty
-    if ((currMask & (1 << currRow)) != 0){
-        // place one horizontal tile
-        generateAllNextMasks(currMask, nextMask, currRow + 1, nextMasks, rows);
-    }
-}   
-
-
+/**
+ * 
+ * In previous approach , the tle or runtime error was coming due to second changing state remainWeight
+ * dp[mask][remainWeight]
+ * -mask represent people that needs to get to the top
+ * -remainWeight represent , how much weight elevator can bear
+ * 
+ * we need to find out , dp[(1 << n) - 1][0]
+ * -(1 << n) - 1 represent the mask , in which all people need to get on top , 1111.. (mask)
+ * - 0 repsent remainWeight lift can bear is 0 , so need next ride
+ * 
+ * so we have to eliminate the second changing state
+ * dp[mask] 
+ * it will return  a pair
+ *  1) the minimum no of rides for a given mask.
+ *  2) remainWeight
+ * 
+*/
 
 void Archit(){
+    int n,x;
+    cin >> n >> x;
 
-    int n,m;
-    cin >> n >> m;
+    vector<int> w(n);
+    for (auto &x : w){
+        cin >> x;
+    }
 
-    // vector<vector<int>> dp(m+1, vector<int>(1 << 11, -1));
-    vector<map<int,int>> dp(m+1);
+    vector<pair<int,int>> dp(1 << n, pair<int,int>(0,0));
+    for (int mask = 1 ; mask < (1 << n) ; mask++){
 
-    function<int(int,int)> solve;
-    solve = [&](int currCol, int currMask){
-        if (currCol == m+1){
-            if (currMask == 0LL){
-                return 1LL;
-            }else{
-                return 0LL;
+        // calulate the minimum no of rides for each mask
+        int ansRides = n; int ansRemainWt = 0;
+        // i represent the index of every person
+        for (int i = 0 ; i < n ; i++){
+            // check if ith bit is set or not
+            if ((1 << i) & mask){
+                // off the ith bit
+                int newMask = ~(1 << i) & (mask);
+
+                auto [rides, remainWt] = dp[newMask];
+
+                // check if the person weight is less than or equal to remaining weight
+                if (w[i] <= remainWt){
+                    // person can go to the lift
+                remainWt = remainWt - w[i];
+                }else{
+                    // need another ride
+                    rides++;
+                    remainWt = x - w[i];
+                }
+
+                // update the minimum no of rides and max remaining weight of the lift
+                if (ansRides > rides || (ansRides == rides && ansRemainWt < remainWt)){
+                    ansRides = rides;
+                    ansRemainWt = remainWt;
+                }
             }
         }
 
-        if (dp[currCol].count(currMask)) return dp[currCol][currMask];
+        // return the {minimum rides, maxRemainWt}
+       dp[mask] = {ansRides, ansRemainWt}; 
+    }
 
-        // generate all next masks 
-        vector<int> nextMasks;
-        /* param {
-            currMask
-            nextMask
-            currRow
-            all nextMasks
-        }*/
-
-        generateAllNextMasks(currMask,0,1,nextMasks, n);
-
-
-        // find all possible ways
-        int answer = 0;
-
-        for (int &nextMask : nextMasks){
-            answer = (answer%M + solve(currCol+1, nextMask)%M)%M;
-        }
-
-        return dp[currCol][currMask] = answer%M;
-    };
-
-    cout << solve(1, 0) << endl;
+    cout << dp[(1<<n)-1].first << endl;
 }
+ 
  
 signed main(){
     
