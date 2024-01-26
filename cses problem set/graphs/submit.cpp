@@ -2,116 +2,20 @@
 using namespace std;
 #define int long long
 
-class triplet{
-    public:
-    int row;
-    int col;
-    int len;
-
-    triplet(int row, int col, int len){
-        this->row = row;
-        this->col = col;
-        this->len = len;
-    }
-
-};
-
-
-void bfs(vector<vector<char>>& grid, int row, int col){
-    int n = grid.size();
-    int m = grid[0].size();
-
-    vector<vector<char>> direction(n, vector<char>(m));
-
-    string path;
-
-    queue<triplet> q;
-    q.push({row, col,0});
-    grid[row][col] = '#';
-
-    int xdir[4] = {0 , 0 , -1, 1};
-    int ydir[4] = {-1, 1, 0 , 0};
-    char label[4] = {'L', 'R', 'U', 'D'};
-
-    while (!q.empty()){
-        auto front = q.front();
-        q.pop();
-
-        
-        for (int dir = 0 ; dir < 4 ; dir++){
-            int newRow = front.row + xdir[dir];
-            int newCol = front.col + ydir[dir];
-
-            if (min(newRow, newCol) < 0 || newRow >= n || newCol >= m || grid[newRow][newCol] == '#') continue;
-
-            if (grid[newRow][newCol] == 'B'){
-                cout << "YES" << endl;
-                cout << front.len + 1 << endl;
-                string path;
-                direction[newRow][newCol] = label[dir];
-                int a = newRow, b = newCol;
-                while (!(a == row && b == col)){
-                    path.push_back(direction[a][b]);
-                    if (direction[a][b] == 'L'){
-                        b++;
-                    }
-                    else if (direction[a][b] == 'R'){
-                        b--;
-                    }
-                    else if (direction[a][b] == 'U'){
-                        a++;
-                    }
-                    else if (direction[a][b] == 'D'){
-                        a--;
-                    }
-
-                }
-
-                    for (auto &x : direction){
-                        for (auto &y : x){
-                            cout << y << " ";
-                        }cout << endl;
-                    }
-                reverse(path.begin(), path.end());
-
-                cout << path << endl;
-
-                return;
-            }
-
-
-            q.push({newRow, newCol, front.len + 1});
-
-            grid[newRow][newCol] = '#';
-            direction[newRow][newCol] = label[dir];
-        }   
-
-    }
-
-    cout << "NO" << endl;
-
-}
-
 
 void Archit(){
-    int n,m;
+    int n, m;
     cin >> n >> m;
 
-    int row = 0;
-    int col = 0;
-
-    vector<vector<char>> grid(n, vector<char>(m));
-    for (int idx = 0 ; idx < n ; idx++){
-        for (int jdx = 0 ; jdx < m ; jdx++){
-            cin >> grid[idx][jdx];
-            if (grid[idx][jdx] == 'A'){
-                row = idx;
-                col = jdx;
-            }
-        }
+    vector<vector<pair<int,int>>> adj(n+1);
+    for (int idx = 0; idx < m ; idx++){
+        int u , v, wt;
+        cin >> u >> v;
+        adj[u].push_back({v, wt});
+        adj[v].push_back({u , wt});
     }
+
     
-    bfs(grid, row, col);
 }
  
  
