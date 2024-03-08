@@ -118,111 +118,131 @@ signed main(){
 #include<bits/stdc++.h>
 using namespace std;
 #define int long long
- 
-class triplet{
-    public:
-    int row;
-    int col;
-    int len;
- 
-    triplet(int row, int col, int len){
-        this->row = row;
-        this->col = col;
-        this->len = len;
-    }
- 
-};
- 
- 
-void bfs(vector<vector<char>>& grid, int row, int col){
+
+// bfs traversal
+int bfs(int &startRow, int &startCol, int &endRow, int &endCol, vector<vector<char>> &grid, vector<vector<char>> &path){
+
+    // calculate rows and cols
     int n = grid.size();
     int m = grid[0].size();
- 
-    vector<vector<char>> direction(n, vector<char>(m));
- 
-    string path;
- 
-    queue<triplet> q;
-    q.push({row, col,0});
-    grid[row][col] = '#';
- 
-    int xdir[4] = {0 , 0 , -1, 1};
-    int ydir[4] = {-1, 1, 0 , 0};
-    char label[4] = {'L', 'R', 'U', 'D'};
- 
-    while (!q.empty()){
-        auto front = q.front();
-        q.pop();
- 
-        
+
+    // create a visited array
+    vector<vector<bool>> visited(n, vector<bool>(m, false));
+
+    // create a queue
+    queue<array<int,3>> que;
+
+    // push the start point and mark it as visited
+    que.push({startRow, startCol, 0});
+    visited[startRow][startCol] = true;
+
+    // direction arrays 
+    int rowdir[4] = {0, 0, 1, -1};
+    int coldir[4] = {1,-1, 0, 0};
+    char pathDir[4] = {'R', 'L', 'D', 'U'};
+
+
+    // bfs traversal
+    while (que.size() > 0){
+
+        // find front 
+        auto [row, col, count] = que.front();
+        que.pop();
+
+        // traverse for all 4 directions
         for (int dir = 0 ; dir < 4 ; dir++){
-            int newRow = front.row + xdir[dir];
-            int newCol = front.col + ydir[dir];
- 
-            if (min(newRow, newCol) < 0 || newRow >= n || newCol >= m || grid[newRow][newCol] == '#') continue;
- 
-            if (grid[newRow][newCol] == 'B'){
-                cout << "YES" << endl;
-                cout << front.len + 1 << endl;
-                string path;
-                direction[newRow][newCol] = label[dir];
-                int a = newRow, b = newCol;
-                while (a != row || b != col){
-                    path.push_back(direction[a][b]);
-                    if (direction[a][b] == 'L'){
-                        b++;
-                    }
-                    else if (direction[a][b] == 'R'){
-                        b--;
-                    }
-                    else if (direction[a][b] == 'U'){
-                        a++;
-                    }
-                    else if (direction[a][b] == 'D'){
-                        a--;
-                    }
-                }
- 
-                reverse(path.begin(), path.end());
- 
-                cout << path << endl;
- 
-                return;
+
+            int newRow = row + rowdir[dir];
+            int newCol = col + coldir[dir];
+
+            // remove invalid cell
+            if (min(newRow, newCol) < 0 || newRow >= n || newCol >= m || visited[newRow][newCol] || grid[newRow][newCol] == '#'){
+                continue;
+            }
+
+            // push new Cell , mark it as visited and mark in path that how it came from start
+            que.push({newRow, newCol, count+1});
+            path[newRow][newCol] = pathDir[dir];
+            visited[newRow][newCol] = true;
+
+            // reach destination
+            if (newRow == endRow && newCol == endCol){
+                return count + 1;
+            }
+
+        }
+    }
+
+    return -1;
+}
+
+
+void Archit(){
+
+    // take no of rows and cols from user
+    int n, m;
+    cin >> n >> m;
+    
+    // take grid from user and along with it find startRow , startCol, endRow, endCol
+    int startRow = -1, startCol = -1;
+    int endRow = -1, endCol = -1;
+
+    vector<vector<char>> grid(n, vector<char>(m));
+    for (int idx = 0 ; idx < n; idx++){
+        for (int jdx = 0 ; jdx < m ; jdx++){
+            cin >> grid[idx][jdx]; 
+            if (grid[idx][jdx] == 'A'){
+
+                startRow = idx;
+                startCol = jdx;
             }
  
- 
-            q.push({newRow, newCol, front.len + 1});
- 
-            grid[newRow][newCol] = '#';
-            direction[newRow][newCol] = label[dir];
-        }   
- 
-    }
- 
-    cout << "NO" << endl;
- 
-}
- 
- 
-void Archit(){
-    int n,m;
-    cin >> n >> m;
- 
-    int row = 0;
-    int col = 0;
- 
-    vector<vector<char>> grid(n, vector<char>(m));
-    for (int idx = 0 ; idx < n ; idx++){
-        for (int jdx = 0 ; jdx < m ; jdx++){
-            cin >> grid[idx][jdx];
-            if (grid[idx][jdx] == 'A'){
-                row = idx;
-                col = jdx;
+            if (grid[idx][jdx] == 'B'){
+
+                endRow = idx;
+                endCol = jdx;
             }
         }
     }
+
+    // create a matrix path to store the path from start to end
+    vector<vector<char>> path(n, vector<char>(m, '.'));
+
+    // calculate len
+    int len = bfs(startRow, startCol , endRow, endCol, grid, path);
+
+    // no path found
+    if (len == -1){
+
+        cout << "NO" << endl;
+
+        return;
+    }
     
-    bfs(grid, row, col);
+    // print the output yes and lenghth of path
+    cout << "YES" << endl;
+    cout << len << endl;
+
+
+    // trace back the path
+    string ans;
+
+    int row = endRow;
+    int col = endCol;
+
+    while (row != startRow || col != startCol){
+        ans += path[row][col];
+        if (path[row][col] == 'U') row++;          // came from down
+        else if (path[row][col] == 'R') col--;     // came from left
+        else if (path[row][col] == 'L') col++;     // came from right
+        else row--;                                // came from up
+    }
+
+    // reverse the path
+    reverse(ans.begin(), ans.end());
+
+    // print answer
+    cout << ans << endl;
 }
  
  
